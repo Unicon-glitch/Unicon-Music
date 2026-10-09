@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Unicon Music — Админ-панель</title>
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="https://drive.google.com/uc?id=1ZK_mVvEviHze5Nqe-2iEgTR6HDn7_898&export=download&format=png">
+<link rel="apple-touch-icon" href="https://drive.google.com/uc?id=1ZK_mVvEviHze5Nqe-2iEgTR6HDn7_898&export=download&format=png">
+
+<meta name="theme-color" content="#07070a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Unicon Music Admin">
+<meta name="mobile-web-app-capable" content="yes">
+
+<style>
+  *,*::before,*::after{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+  }
+
+  html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#07070a;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    color:#fff;
+    -webkit-tap-highlight-color:transparent;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  #loader{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:22px;
+    background:radial-gradient(circle at 50% 30%,#1a1224 0%,#07070a 70%);
+    transition:opacity .45s ease,visibility .45s ease;
+  }
+  #loader.hidden{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+  }
+  .loader-logo{
+    width:64px;
+    height:64px;
+    border-radius:18px;
+    display:grid;
+    place-items:center;
+    font-size:30px;
+    font-weight:800;
+    color:#fff;
+    background:linear-gradient(135deg,#a78bfa,#6d28d9);
+    box-shadow:0 0 40px rgba(167,139,250,0.6);
+    animation:logoPulse 2s ease-in-out infinite;
+  }
+  @keyframes logoPulse{
+    0%,100%{transform:scale(1);box-shadow:0 0 40px rgba(167,139,250,0.6)}
+    50%{transform:scale(1.06);box-shadow:0 0 60px rgba(167,139,250,0.9)}
+  }
+  .loader-badge{
+    display:inline-block;
+    padding:4px 12px;
+    border-radius:100px;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:#a78bfa;
+    background:rgba(139,92,246,0.15);
+    border:1px solid rgba(139,92,246,0.35);
+    margin-top:-4px;
+  }
+  .loader-spinner{
+    width:34px;
+    height:34px;
+    border:3px solid rgba(139,92,246,0.22);
+    border-top-color:#a78bfa;
+    border-radius:50%;
+    animation:spin .9s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loader-text{
+    font-size:13px;
+    color:#71717a;
+    letter-spacing:.05em;
+    font-weight:500;
+  }
+
+  #app-frame{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    border:0;
+    display:block;
+    background:#07070a;
+  }
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <div class="loader-logo">U</div>
+  <div class="loader-badge">Admin</div>
+  <div class="loader-spinner"></div>
+  <div class="loader-text">Загрузка админ-панели…</div>
+</div>
+
+<iframe
+  id="app-frame"
+  src="about:blank"
+  allow="clipboard-write; clipboard-read"
+  referrerpolicy="no-referrer-when-downgrade"
+  loading="eager"
+  title="Unicon Music — Админ-панель"
+></iframe>
+
+<script>
+  /* ------------------------------------------------------------------
+     КОНФИГУРАЦИЯ
+     URL тот же, что и в index.html.
+     Этот файл автоматически добавит ?admin=1, чтобы открылась админка.
+  ------------------------------------------------------------------ */
+  var GAS_URL = 'https://script.google.com/macros/s/AKfycbzOhyEzX7L2De4VUO2lg8NhgeJ2aDBMDybFi255ON0WYKV6UcLW2iJUMT00sIIU8xs/exec';
+
+  (function(){
+    var iframe = document.getElementById('app-frame');
+    var loader = document.getElementById('loader');
+
+    if(GAS_URL.indexOf('ВАШ_ДЛИННЫЙ_ИДЕНТИФИКАТОР') !== -1){
+      document.body.innerHTML =
+        '<div style="min-height:100vh;display:grid;place-items:center;padding:24px;' +
+        'background:#07070a;color:#fff;font-family:sans-serif;text-align:center;line-height:1.7;">' +
+          '<div>' +
+            '<div style="font-size:48px;margin-bottom:16px;">⚠️</div>' +
+            '<div style="font-size:20px;font-weight:700;margin-bottom:10px;">Не настроен адрес приложения</div>' +
+            '<div style="color:#a1a1aa;font-size:14px;max-width:440px;">' +
+              'Откройте файл <code style="background:rgba(139,92,246,0.15);padding:2px 8px;' +
+              'border-radius:6px;color:#a78bfa;">admin.html</code> и замените ' +
+              '<code style="background:rgba(139,92,246,0.15);padding:2px 8px;' +
+              'border-radius:6px;color:#a78bfa;">ВАШ_ДЛИННЫЙ_ИДЕНТИФИКАТОР</code> ' +
+              'на ID вашего Google Apps Script веб-приложения.' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      return;
+    }
+
+    // Принудительно добавляем ?admin=1
+    var sep = GAS_URL.indexOf('?') === -1 ? '?' : '&';
+    var finalUrl = GAS_URL + sep + 'admin=1';
+
+    iframe.addEventListener('load', function(){
+      setTimeout(function(){
+        loader.classList.add('hidden');
+      }, 250);
+    });
+
+    setTimeout(function(){
+      loader.classList.add('hidden');
+    }, 20000);
+
+    iframe.src = finalUrl;
+
+    window.addEventListener('resize', function(){
+      try{
+        iframe.contentWindow.postMessage({ type:'parentResize' }, '*');
+      }catch(e){}
+    });
+  })();
+</script>
+
+</body>
+</html>
